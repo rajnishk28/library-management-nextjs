@@ -87,10 +87,12 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   html {
     font-size: 15px;
     @apply font-sans;
   }
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "cv11", "ss01";

@@ -9,11 +9,11 @@ import { AdminSidebar } from "./__components/admin-sidebar";
 
 const PAGE_META: Record<string, { title: string; subtitle: string }> = {
   "/admin/dashboard": { title: "Dashboard", subtitle: "Overview & analytics" },
-  "/admin/books":     { title: "Books",      subtitle: "Manage inventory" },
-  "/admin/books/add": { title: "Add Book",   subtitle: "Add a new title to inventory" },
-  "/admin/users":     { title: "Users",      subtitle: "Manage members" },
-  "/admin/requests":  { title: "Requests",   subtitle: "Approve & track" },
-  "/admin/settings":  { title: "Profile",    subtitle: "Update your details" },
+  "/admin/books": { title: "Books", subtitle: "Manage inventory" },
+  "/admin/books/add": { title: "Add Book", subtitle: "Add a new title to inventory" },
+  "/admin/users": { title: "Users", subtitle: "Manage members" },
+  "/admin/requests": { title: "Requests", subtitle: "Approve & track" },
+  "/admin/settings": { title: "Profile", subtitle: "Update your details" },
 };
 
 export default function AdminLayout({ children }: { children: ReactNode }) {

@@ -11,10 +11,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function SignupPage() {
-  const router              = useRouter();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showPwd, setShowPwd] = useState(false);
-  const [form, setForm]       = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -41,7 +41,7 @@ export default function SignupPage() {
         {/* Decorative elements */}
         <div className="absolute -left-[20%] -top-[10%] size-[80%] rounded-full bg-indigo-600/10 blur-[120px]" />
         <div className="absolute -bottom-[20%] -right-[10%] size-[60%] rounded-full bg-violet-600/10 blur-[100px]" />
-        
+
         <div className="relative z-10 flex items-center gap-3">
           <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 shadow-lg shadow-indigo-500/30">
             <Library className="size-5 text-white" />

@@ -12,23 +12,23 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 
 export default function AdminSettingsPage() {
-  const [loading, setLoading]         = useState(true);
-  const [profile, setProfile]         = useState<any>(null);
-  const session                       = getSession();
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<any>(null);
+  const session = getSession();
 
   // Profile form
-  const [name, setName]   = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [savingProfile, setSavingProfile] = useState(false);
 
   // Password form
-  const [currentPw, setCurrentPw]     = useState("");
-  const [newPw, setNewPw]             = useState("");
-  const [confirmPw, setConfirmPw]     = useState("");
+  const [currentPw, setCurrentPw] = useState("");
+  const [newPw, setNewPw] = useState("");
+  const [confirmPw, setConfirmPw] = useState("");
   const [showCurrent, setShowCurrent] = useState(false);
-  const [showNew, setShowNew]         = useState(false);
+  const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [savingPw, setSavingPw]       = useState(false);
+  const [savingPw, setSavingPw] = useState(false);
 
   useEffect(() => {
     userService.getProfile()

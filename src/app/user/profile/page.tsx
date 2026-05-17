@@ -13,7 +13,7 @@ import { LoadingPanel } from "@/components/loading-panel";
 export default function UserProfilePage() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<any>(null);
-  const [stats, setStats]     = useState<any>(null);
+  const [stats, setStats] = useState<any>(null);
   const session = getSession();
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function UserProfilePage() {
           </div>
 
           <div className="mt-5 grid grid-cols-1 gap-3 border-t border-slate-100 pt-5 sm:grid-cols-2">
-            <InfoItem label="User ID"        value={session?.user?.id || "—"} mono />
+            <InfoItem label="User ID" value={session?.user?.id || "—"} mono />
             <InfoItem label="Account status" value="Active" highlight />
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function UserProfilePage() {
       <div>
         <h3 className="mb-3 text-xs font-bold uppercase tracking-widest text-slate-400">Library overview</h3>
         <div className="grid grid-cols-2 gap-3">
-          <StatCard label="Total books"   value={stats?.library?.total_books ?? 0}     icon={BookOpen}     color="indigo"  />
+          <StatCard label="Total books" value={stats?.library?.total_books ?? 0} icon={BookOpen} color="indigo" />
           <StatCard label="Available now" value={stats?.library?.available_books ?? 0} icon={CheckCircle2} color="emerald" />
         </div>
       </div>
@@ -79,12 +79,12 @@ export default function UserProfilePage() {
       <div>
         <h3 className="mb-3 text-xs font-bold uppercase tracking-widest text-slate-400">My activity</h3>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <StatCard label="Pending"          value={stats?.issues?.pending          ?? 0} icon={Clock}        color="amber"   />
-          <StatCard label="Alloted"          value={stats?.issues?.alloted          ?? 0} icon={BookMarked}   color="indigo"  />
-          <StatCard label="Return requested" value={stats?.issues?.return_requested ?? 0} icon={RotateCcw}    color="blue"    />
-          <StatCard label="Returned"         value={stats?.issues?.returned         ?? 0} icon={CheckCircle2} color="emerald" />
-          <StatCard label="Rejected"         value={stats?.issues?.rejected         ?? 0} icon={XCircle}      color="red"     />
-          <StatCard label="Total requests"   value={stats?.issues?.total            ?? 0} icon={BookOpen}     color="slate"   bold />
+          <StatCard label="Pending" value={stats?.issues?.pending ?? 0} icon={Clock} color="amber" />
+          <StatCard label="Alloted" value={stats?.issues?.alloted ?? 0} icon={BookMarked} color="indigo" />
+          <StatCard label="Return requested" value={stats?.issues?.return_requested ?? 0} icon={RotateCcw} color="blue" />
+          <StatCard label="Returned" value={stats?.issues?.returned ?? 0} icon={CheckCircle2} color="emerald" />
+          <StatCard label="Rejected" value={stats?.issues?.rejected ?? 0} icon={XCircle} color="red" />
+          <StatCard label="Total requests" value={stats?.issues?.total ?? 0} icon={BookOpen} color="slate" bold />
         </div>
       </div>
     </div>
@@ -95,9 +95,8 @@ function InfoItem({ label, value, mono, highlight }: { label: string; value: str
   return (
     <div className="rounded-lg bg-slate-50 px-4 py-3 ring-1 ring-slate-100">
       <p className="text-xs font-medium text-slate-400">{label}</p>
-      <p className={`mt-1 truncate text-sm font-semibold ${
-        highlight ? "text-emerald-600" : "text-slate-800"
-      } ${mono ? "font-mono text-xs" : ""}`}>
+      <p className={`mt-1 truncate text-sm font-semibold ${highlight ? "text-emerald-600" : "text-slate-800"
+        } ${mono ? "font-mono text-xs" : ""}`}>
         {value}
       </p>
     </div>
@@ -105,12 +104,12 @@ function InfoItem({ label, value, mono, highlight }: { label: string; value: str
 }
 
 const COLOR_MAP: Record<string, { bg: string; icon: string }> = {
-  indigo:  { bg: "bg-indigo-50",  icon: "text-indigo-600"  },
+  indigo: { bg: "bg-indigo-50", icon: "text-indigo-600" },
   emerald: { bg: "bg-emerald-50", icon: "text-emerald-600" },
-  amber:   { bg: "bg-amber-50",   icon: "text-amber-600"   },
-  blue:    { bg: "bg-blue-50",    icon: "text-blue-600"    },
-  red:     { bg: "bg-red-50",     icon: "text-red-500"     },
-  slate:   { bg: "bg-slate-100",  icon: "text-slate-500"   },
+  amber: { bg: "bg-amber-50", icon: "text-amber-600" },
+  blue: { bg: "bg-blue-50", icon: "text-blue-600" },
+  red: { bg: "bg-red-50", icon: "text-red-500" },
+  slate: { bg: "bg-slate-100", icon: "text-slate-500" },
 };
 
 function StatCard({

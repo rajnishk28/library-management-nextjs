@@ -10,7 +10,7 @@ import { UserIssueTable } from "@/components/user-issue-table";
 
 export default function UserAllotedPage() {
   const [loading, setLoading] = useState(true);
-  const [issues, setIssues]   = useState<any[]>([]);
+  const [issues, setIssues] = useState<any[]>([]);
 
   async function loadData() {
     try {

@@ -9,25 +9,25 @@ import { getIssueStatus } from "@/components/status-badge";
 import { cn } from "@/lib/utils";
 
 const TABS = [
-  { value: "all",              label: "All"             },
-  { value: "pending",          label: "Pending"         },
-  { value: "alloted",          label: "Approved"        },
+  { value: "all", label: "All" },
+  { value: "pending", label: "Pending" },
+  { value: "alloted", label: "Approved" },
   { value: "return_requested", label: "Return Requests" },
-  { value: "returned",         label: "Returned"        },
-  { value: "rejected",         label: "Rejected"        },
+  { value: "returned", label: "Returned" },
+  { value: "rejected", label: "Rejected" },
 ];
 
 const TAB_DOT: Record<string, string> = {
-  pending:          "bg-amber-400",
-  alloted:          "bg-emerald-500",
+  pending: "bg-amber-400",
+  alloted: "bg-emerald-500",
   return_requested: "bg-blue-500",
-  returned:         "bg-emerald-400",
-  rejected:         "bg-red-500",
+  returned: "bg-emerald-400",
+  rejected: "bg-red-500",
 };
 
 export default function AdminRequestsPage() {
-  const [loading, setLoading]     = useState(true);
-  const [requests, setRequests]   = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [requests, setRequests] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("all");
 
   async function loadData() {
@@ -75,7 +75,7 @@ export default function AdminRequestsPage() {
       {/* Tab bar */}
       <div className="flex flex-wrap gap-1.5">
         {TABS.map((tab) => {
-          const count  = tab.value === "all" ? requests.length : (counts[tab.value] ?? 0);
+          const count = tab.value === "all" ? requests.length : (counts[tab.value] ?? 0);
           const active = activeTab === tab.value;
           return (
             <button

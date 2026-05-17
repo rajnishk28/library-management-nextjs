@@ -18,16 +18,16 @@ import {
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/user/books",    label: "Browse Books", icon: BookOpen   },
-  { href: "/user/alloted",  label: "My Books",     icon: BookMarked },
-  { href: "/user/history",  label: "History",      icon: History    },
-  { href: "/user/profile",  label: "Profile",      icon: UserRound  },
-  { href: "/user/settings", label: "Settings",     icon: Settings   },
+  { href: "/user/books", label: "Browse Books", icon: BookOpen },
+  { href: "/user/alloted", label: "My Books", icon: BookMarked },
+  { href: "/user/history", label: "History", icon: History },
+  { href: "/user/profile", label: "Profile", icon: UserRound },
+  { href: "/user/settings", label: "Settings", icon: Settings },
 ];
 
 export function UserSidebar() {
   const pathname = usePathname();
-  const router   = useRouter();
+  const router = useRouter();
   const { toggleSidebar, open, isMobile, setOpenMobile } = useSidebar();
 
   function isActive(href: string) {

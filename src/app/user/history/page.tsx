@@ -10,17 +10,17 @@ import { UserIssueTable } from "@/components/user-issue-table";
 import { cn } from "@/lib/utils";
 
 const TABS = [
-  { value: "all",              label: "All",              dot: "bg-slate-400"   },
-  { value: "pending",          label: "Pending",          dot: "bg-amber-400"   },
-  { value: "alloted",          label: "Approved",         dot: "bg-indigo-500"  },
-  { value: "return_requested", label: "Return Requested", dot: "bg-blue-500"    },
-  { value: "returned",         label: "Returned",         dot: "bg-emerald-500" },
-  { value: "rejected",         label: "Rejected",         dot: "bg-red-500"     },
+  { value: "all", label: "All", dot: "bg-slate-400" },
+  { value: "pending", label: "Pending", dot: "bg-amber-400" },
+  { value: "alloted", label: "Approved", dot: "bg-indigo-500" },
+  { value: "return_requested", label: "Return Requested", dot: "bg-blue-500" },
+  { value: "returned", label: "Returned", dot: "bg-emerald-500" },
+  { value: "rejected", label: "Rejected", dot: "bg-red-500" },
 ];
 
 export default function UserHistoryPage() {
-  const [loading, setLoading]     = useState(true);
-  const [issues, setIssues]       = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [issues, setIssues] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("all");
 
   async function loadData() {
@@ -57,7 +57,7 @@ export default function UserHistoryPage() {
       {/* Filter bar */}
       <div className="flex flex-wrap gap-1.5">
         {TABS.map((tab) => {
-          const count  = tab.value === "all" ? issues.length : (counts[tab.value] ?? 0);
+          const count = tab.value === "all" ? issues.length : (counts[tab.value] ?? 0);
           const active = activeTab === tab.value;
           return (
             <button

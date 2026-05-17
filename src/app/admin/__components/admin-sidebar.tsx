@@ -18,16 +18,16 @@ import {
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/admin/dashboard", label: "Dashboard", icon: BarChart3     },
-  { href: "/admin/users",     label: "Users",     icon: Users         },
-  { href: "/admin/books",     label: "Books",     icon: BookOpen      },
-  { href: "/admin/requests",  label: "Requests",  icon: ClipboardList },
-  { href: "/admin/settings",  label: "Profile",   icon: UserRound     },
+  { href: "/admin/dashboard", label: "Dashboard", icon: BarChart3 },
+  { href: "/admin/users", label: "Users", icon: Users },
+  { href: "/admin/books", label: "Books", icon: BookOpen },
+  { href: "/admin/requests", label: "Requests", icon: ClipboardList },
+  { href: "/admin/settings", label: "Profile", icon: UserRound },
 ];
 
 export function AdminSidebar() {
   const pathname = usePathname();
-  const router   = useRouter();
+  const router = useRouter();
   const { toggleSidebar, open, isMobile, setOpenMobile } = useSidebar();
 
   function isActive(href: string) {

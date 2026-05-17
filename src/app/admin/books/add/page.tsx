@@ -23,30 +23,30 @@ const initialState: BookForm = {
 };
 
 const FIELDS = [
-  { key: "title"    as const, label: "Book Title",       placeholder: "The Pragmatic Programmer",  icon: BookOpen, type: "text"   },
-  { key: "author"   as const, label: "Author",           placeholder: "Andrew Hunt",               icon: User,     type: "text"   },
-  { key: "category" as const, label: "Category",         placeholder: "Software Engineering",      icon: Tag,      type: "text"   },
+  { key: "title" as const, label: "Book Title", placeholder: "The Pragmatic Programmer", icon: BookOpen, type: "text" },
+  { key: "author" as const, label: "Author", placeholder: "Andrew Hunt", icon: User, type: "text" },
+  { key: "category" as const, label: "Category", placeholder: "Software Engineering", icon: Tag, type: "text" },
 ];
 
 const NUM_FIELDS = [
-  { key: "quantity"  as const, label: "Total Copies",     icon: Copy },
+  { key: "quantity" as const, label: "Total Copies", icon: Copy },
   { key: "available" as const, label: "Available Copies", icon: Hash },
 ];
 
 export default function AddBookPage() {
   const router = useRouter();
-  const [form, setForm]     = useState<BookForm>(initialState);
+  const [form, setForm] = useState<BookForm>(initialState);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof BookForm, string>>>({});
 
   function validate() {
     const next: typeof errors = {};
-    if (!form.title.trim())    next.title    = "Title is required";
-    if (!form.author.trim())   next.author   = "Author is required";
+    if (!form.title.trim()) next.title = "Title is required";
+    if (!form.author.trim()) next.author = "Author is required";
     if (!form.category.trim()) next.category = "Category is required";
-    if (Number(form.quantity) < 1)                                       next.quantity  = "Quantity must be at least 1";
-    if (Number(form.available) < 0)                                      next.available = "Available copies cannot be negative";
-    if (Number(form.available) > Number(form.quantity))                  next.available = "Available copies cannot exceed quantity";
+    if (Number(form.quantity) < 1) next.quantity = "Quantity must be at least 1";
+    if (Number(form.available) < 0) next.available = "Available copies cannot be negative";
+    if (Number(form.available) > Number(form.quantity)) next.available = "Available copies cannot exceed quantity";
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -62,10 +62,10 @@ export default function AddBookPage() {
     setSaving(true);
     try {
       await adminService.addBook({
-        title:     form.title.trim(),
-        author:    form.author.trim(),
-        category:  form.category.trim(),
-        quantity:  Number(form.quantity),
+        title: form.title.trim(),
+        author: form.author.trim(),
+        category: form.category.trim(),
+        quantity: Number(form.quantity),
         available: Number(form.available),
       });
       toast.success("Book added successfully");

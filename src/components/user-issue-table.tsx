@@ -44,7 +44,7 @@ export function UserIssueTable({ issues, books = [], onReturn }: Props) {
           </TableRow>
         ) : (
           issues.map((issue: any) => {
-            const book   = issue.book || books.find((b: any) => b._id === issue.book_id);
+            const book = issue.book || books.find((b: any) => b._id === issue.book_id);
             const status = getIssueStatus(issue);
             return (
               <TableRow key={issue._id} className="transition-colors hover:bg-slate-50/60">

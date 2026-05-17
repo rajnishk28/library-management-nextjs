@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { BookOpen, Loader2, Eye, EyeOff, Library, ShieldAlert } from "lucide-react";
@@ -11,13 +11,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function LoginPage() {
-  const router              = useRouter();
-  const searchParams        = useSearchParams();
+function LoginPageFallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-slate-50">
+      <Loader2 className="size-8 animate-spin text-indigo-600" />
+    </div>
+  );
+}
+
+function LoginPageContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [showPwd, setShowPwd] = useState(false);
-  const [form, setForm]       = useState({ email: "", password: "" });
-  const sessionExpired        = searchParams.get("session_expired") === "1";
+  const [form, setForm] = useState({ email: "", password: "" });
+  const sessionExpired = searchParams.get("session_expired") === "1";
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -40,7 +48,7 @@ export default function LoginPage() {
         {/* Decorative elements */}
         <div className="absolute -left-[20%] -top-[10%] size-[80%] rounded-full bg-indigo-600/10 blur-[120px]" />
         <div className="absolute -bottom-[20%] -right-[10%] size-[60%] rounded-full bg-violet-600/10 blur-[100px]" />
-        
+
         <div className="relative z-10 flex items-center gap-3">
           <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 shadow-lg shadow-indigo-500/30">
             <Library className="size-5 text-white" />
@@ -64,8 +72,8 @@ export default function LoginPage() {
           <div className="relative z-10 space-y-4 pt-4">
             {[
               { title: "Real-time inventory", desc: "Track every copy, availability, and issue status." },
-              { title: "Role-based access",   desc: "Separate admin and member workspaces." },
-              { title: "Request workflows",   desc: "Approve, reject, and track returns end-to-end." },
+              { title: "Role-based access", desc: "Separate admin and member workspaces." },
+              { title: "Request workflows", desc: "Approve, reject, and track returns end-to-end." },
             ].map((f) => (
               <div key={f.title} className="group flex items-start gap-4 rounded-xl border border-white/5 bg-white/5 p-4 backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/10">
                 <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-indigo-600/20">
@@ -179,5 +187,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginPageFallback />}>
+      <LoginPageContent />
+    </Suspense>
   );
 }

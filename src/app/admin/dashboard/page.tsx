@@ -12,9 +12,9 @@ import { LoadingPanel } from "@/components/loading-panel";
 import { getIssueStatus } from "@/components/status-badge";
 
 export default function AdminDashboardPage() {
-  const [loading, setLoading]     = useState(true);
-  const [stats, setStats]         = useState<any>(null);
-  const [requests, setRequests]   = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<any>(null);
+  const [requests, setRequests] = useState<any[]>([]);
   const [inventory, setInventory] = useState<any>(null);
 
   async function loadData() {
@@ -49,12 +49,12 @@ export default function AdminDashboardPage() {
   if (loading) return <LoadingPanel />;
 
   // Use live inventory data when available, fall back to stats-derived values
-  const totalCopies     = inventory?.total_copies     ?? stats.books.total_copies;
-  const availCopies     = inventory?.available_copies ?? stats.books.available_copies;
-  const issuedCopies    = inventory?.issued_copies    ?? stats.books.issued_copies;
-  const pendingReqs     = inventory?.pending_requests ?? stats.requests.pending;
-  const activeIssues    = inventory?.active_issues    ?? stats.requests.alloted;
-  const returnReqs      = inventory?.return_requests  ?? stats.requests.return_requested;
+  const totalCopies = inventory?.total_copies ?? stats.books.total_copies;
+  const availCopies = inventory?.available_copies ?? stats.books.available_copies;
+  const issuedCopies = inventory?.issued_copies ?? stats.books.issued_copies;
+  const pendingReqs = inventory?.pending_requests ?? stats.requests.pending;
+  const activeIssues = inventory?.active_issues ?? stats.requests.alloted;
+  const returnReqs = inventory?.return_requests ?? stats.requests.return_requested;
 
   const availPct = totalCopies > 0
     ? Math.round((availCopies / totalCopies) * 100)
@@ -65,10 +65,10 @@ export default function AdminDashboardPage() {
 
       {/* ── Top KPI row ───────────────────────────────────── */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Total titles"    value={stats.books.total}                sub={`${stats.books.total_copies} copies total`}      icon={BookOpen}     accent="indigo"  />
-        <KpiCard label="Registered users" value={stats.users.total}               sub={`${stats.users.active} active`}                  icon={Users}        accent="violet"  />
-        <KpiCard label="Active issues"   value={stats.requests.alloted}           sub={`${stats.requests.pending} pending approval`}     icon={CheckCircle2} accent="emerald" />
-        <KpiCard label="Return requests" value={stats.requests.return_requested}  sub={`${stats.requests.returned} returned total`}     icon={RotateCcw}    accent="amber"   />
+        <KpiCard label="Total titles" value={stats.books.total} sub={`${stats.books.total_copies} copies total`} icon={BookOpen} accent="indigo" />
+        <KpiCard label="Registered users" value={stats.users.total} sub={`${stats.users.active} active`} icon={Users} accent="violet" />
+        <KpiCard label="Active issues" value={stats.requests.alloted} sub={`${stats.requests.pending} pending approval`} icon={CheckCircle2} accent="emerald" />
+        <KpiCard label="Return requests" value={stats.requests.return_requested} sub={`${stats.requests.returned} returned total`} icon={RotateCcw} accent="amber" />
       </div>
 
       {/* ── Inventory + Request breakdown ─────────────────── */}
@@ -85,10 +85,10 @@ export default function AdminDashboardPage() {
 
           <div className="space-y-3">
             <InventoryRow label="Total copies" value={totalCopies} />
-            <InventoryRow label="Available"    value={availCopies}  color="emerald" />
-            <InventoryRow label="Issued out"   value={issuedCopies} color="amber" />
-            <InventoryRow label="Pending reqs" value={pendingReqs}  color="amber" />
-            <InventoryRow label="Return reqs"  value={returnReqs}   color="blue" />
+            <InventoryRow label="Available" value={availCopies} color="emerald" />
+            <InventoryRow label="Issued out" value={issuedCopies} color="amber" />
+            <InventoryRow label="Pending reqs" value={pendingReqs} color="amber" />
+            <InventoryRow label="Return reqs" value={returnReqs} color="blue" />
           </div>
 
           {/* Availability bar */}
@@ -116,12 +116,12 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            <RequestStat label="Pending"    value={stats.requests.pending}          dot="amber"   />
-            <RequestStat label="Approved"   value={stats.requests.alloted}          dot="emerald" />
-            <RequestStat label="Return req." value={stats.requests.return_requested} dot="blue"   />
-            <RequestStat label="Returned"   value={stats.requests.returned}         dot="slate"   />
-            <RequestStat label="Rejected"   value={stats.requests.rejected}         dot="red"     />
-            <RequestStat label="Total"      value={stats.requests.total}            dot="indigo"  bold />
+            <RequestStat label="Pending" value={stats.requests.pending} dot="amber" />
+            <RequestStat label="Approved" value={stats.requests.alloted} dot="emerald" />
+            <RequestStat label="Return req." value={stats.requests.return_requested} dot="blue" />
+            <RequestStat label="Returned" value={stats.requests.returned} dot="slate" />
+            <RequestStat label="Rejected" value={stats.requests.rejected} dot="red" />
+            <RequestStat label="Total" value={stats.requests.total} dot="indigo" bold />
           </div>
         </div>
       </div>
@@ -146,10 +146,10 @@ export default function AdminDashboardPage() {
 // ── Sub-components ─────────────────────────────────────────────────────────
 
 const ACCENT_CLASSES: Record<string, { bg: string; icon: string; gradient: string }> = {
-  indigo:  { bg: "bg-indigo-50",  icon: "text-indigo-600",  gradient: "from-indigo-500  to-indigo-600"  },
-  violet:  { bg: "bg-violet-50",  icon: "text-violet-600",  gradient: "from-violet-500  to-violet-600"  },
+  indigo: { bg: "bg-indigo-50", icon: "text-indigo-600", gradient: "from-indigo-500  to-indigo-600" },
+  violet: { bg: "bg-violet-50", icon: "text-violet-600", gradient: "from-violet-500  to-violet-600" },
   emerald: { bg: "bg-emerald-50", icon: "text-emerald-600", gradient: "from-emerald-500 to-emerald-600" },
-  amber:   { bg: "bg-amber-50",   icon: "text-amber-600",   gradient: "from-amber-400   to-amber-500"   },
+  amber: { bg: "bg-amber-50", icon: "text-amber-600", gradient: "from-amber-400   to-amber-500" },
 };
 
 function KpiCard({
@@ -178,9 +178,9 @@ function KpiCard({
 function InventoryRow({ label, value, color }: { label: string; value: number; color?: string }) {
   const cls =
     color === "emerald" ? "text-emerald-600" :
-    color === "amber"   ? "text-amber-600"   :
-    color === "blue"    ? "text-blue-600"    :
-    "text-slate-800";
+      color === "amber" ? "text-amber-600" :
+        color === "blue" ? "text-blue-600" :
+          "text-slate-800";
   return (
     <div className="flex items-center justify-between rounded-lg bg-slate-50/60 px-3 py-2">
       <span className="text-sm text-slate-500">{label}</span>
@@ -190,12 +190,12 @@ function InventoryRow({ label, value, color }: { label: string; value: number; c
 }
 
 const DOT_CLASSES: Record<string, string> = {
-  amber:   "bg-amber-400",
+  amber: "bg-amber-400",
   emerald: "bg-emerald-500",
-  blue:    "bg-blue-500",
-  slate:   "bg-slate-400",
-  red:     "bg-red-500",
-  indigo:  "bg-indigo-500",
+  blue: "bg-blue-500",
+  slate: "bg-slate-400",
+  red: "bg-red-500",
+  indigo: "bg-indigo-500",
 };
 
 function RequestStat({ label, value, dot, bold }: { label: string; value: number; dot: string; bold?: boolean }) {

@@ -8,15 +8,15 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { UserSidebar } from "./__components/user-sidebar";
 
 const PAGE_META: Record<string, { title: string; subtitle: string }> = {
-  "/user/books":    { title: "Browse Books", subtitle: "Search and request titles"  },
-  "/user/alloted":  { title: "My Books",     subtitle: "Currently issued to you"    },
-  "/user/history":  { title: "History",      subtitle: "All your past requests"     },
-  "/user/profile":  { title: "Profile",      subtitle: "Your account details"       },
-  "/user/settings": { title: "Settings",     subtitle: "Update your details"        },
+  "/user/books": { title: "Browse Books", subtitle: "Search and request titles" },
+  "/user/alloted": { title: "My Books", subtitle: "Currently issued to you" },
+  "/user/history": { title: "History", subtitle: "All your past requests" },
+  "/user/profile": { title: "Profile", subtitle: "Your account details" },
+  "/user/settings": { title: "Settings", subtitle: "Update your details" },
 };
 
 export default function UserLayout({ children }: { children: ReactNode }) {
-  const router   = useRouter();
+  const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {

@@ -31,18 +31,18 @@ import {
 const emptyEdit = { title: "", author: "", category: "", quantity: 1, available: 1 };
 
 export default function AdminBooksPage() {
-  const [loading, setLoading]   = useState(true);
-  const [books, setBooks]       = useState<any[]>([]);
-  const [search, setSearch]     = useState("");
-  const [page, setPage]         = useState(1);
-  const [limit]                 = useState(10);
-  const [total, setTotal]       = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [books, setBooks] = useState<any[]>([]);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [editBook, setEditBook] = useState<any | null>(null);
   const [editForm, setEditForm] = useState(emptyEdit);
-  const [saving, setSaving]     = useState(false);
+  const [saving, setSaving] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<any | null>(null);
-  const [deleting, setDeleting]         = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => { loadData(); }, [page, search]);
 
@@ -62,10 +62,10 @@ export default function AdminBooksPage() {
   function openEdit(book: any) {
     setEditBook(book);
     setEditForm({
-      title:     book.title     || "",
-      author:    book.author    || "",
-      category:  book.category  || "",
-      quantity:  book.quantity  ?? 1,
+      title: book.title || "",
+      author: book.author || "",
+      category: book.category || "",
+      quantity: book.quantity ?? 1,
       available: book.available ?? 0,
     });
   }
@@ -76,7 +76,7 @@ export default function AdminBooksPage() {
     try {
       await adminService.updateBook(editBook._id, {
         ...editForm,
-        quantity:  Number(editForm.quantity),
+        quantity: Number(editForm.quantity),
         available: Number(editForm.available),
       });
       toast.success("Book updated");
@@ -119,10 +119,10 @@ export default function AdminBooksPage() {
     <>
       {/* Stats row */}
       <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatCard label="Total titles"  value={total} />
-        <StatCard label="Total copies"  value={books.reduce((s, b) => s + (b.quantity  || 0), 0)} />
-        <StatCard label="Available"     value={books.reduce((s, b) => s + (b.available || 0), 0)} color="green" />
-        <StatCard label="Issued"        value={books.reduce((s, b) => s + ((b.quantity || 0) - (b.available || 0)), 0)} color="amber" />
+        <StatCard label="Total titles" value={total} />
+        <StatCard label="Total copies" value={books.reduce((s, b) => s + (b.quantity || 0), 0)} />
+        <StatCard label="Available" value={books.reduce((s, b) => s + (b.available || 0), 0)} color="green" />
+        <StatCard label="Issued" value={books.reduce((s, b) => s + ((b.quantity || 0) - (b.available || 0)), 0)} color="amber" />
       </div>
 
       {/* Books table */}
@@ -330,8 +330,8 @@ export default function AdminBooksPage() {
 function StatCard({ label, value, color }: { label: string; value: number; color?: "green" | "amber" }) {
   const valueClass =
     color === "green" ? "text-emerald-600" :
-    color === "amber" ? "text-amber-600"   :
-    "text-slate-900";
+      color === "amber" ? "text-amber-600" :
+        "text-slate-900";
   return (
     <div className="rounded-xl bg-white px-4 py-3.5 shadow-sm ring-1 ring-slate-900/5 transition-all hover:shadow-md hover:ring-indigo-500/20">
       <p className="text-xs font-medium uppercase tracking-wide text-slate-400">{label}</p>

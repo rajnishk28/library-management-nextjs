@@ -27,18 +27,18 @@ import {
 
 // ── Status chip ─────────────────────────────────────────────────────────────
 const STATUS_STYLES: Record<string, string> = {
-  pending:          "bg-amber-50   text-amber-700   ring-amber-200/80",
-  alloted:          "bg-emerald-50 text-emerald-700 ring-emerald-200/80",
+  pending: "bg-amber-50   text-amber-700   ring-amber-200/80",
+  alloted: "bg-emerald-50 text-emerald-700 ring-emerald-200/80",
   return_requested: "bg-blue-50    text-blue-700    ring-blue-200/80",
-  returned:         "bg-slate-100  text-slate-500   ring-slate-200",
-  rejected:         "bg-red-50     text-red-700     ring-red-200/80",
+  returned: "bg-slate-100  text-slate-500   ring-slate-200",
+  rejected: "bg-red-50     text-red-700     ring-red-200/80",
 };
 const STATUS_DOT: Record<string, string> = {
-  pending:          "bg-amber-400",
-  alloted:          "bg-emerald-500",
+  pending: "bg-amber-400",
+  alloted: "bg-emerald-500",
   return_requested: "bg-blue-500",
-  returned:         "bg-slate-400",
-  rejected:         "bg-red-500",
+  returned: "bg-slate-400",
+  rejected: "bg-red-500",
 };
 
 function IssueStatusChip({ status }: { status: string }) {
@@ -51,21 +51,21 @@ function IssueStatusChip({ status }: { status: string }) {
 }
 
 export default function AdminUsersPage() {
-  const [loading, setLoading]   = useState(true);
-  const [users, setUsers]       = useState<any[]>([]);
-  const [search, setSearch]     = useState("");
-  const [page, setPage]         = useState(1);
-  const [limit]                 = useState(10);
-  const [total, setTotal]       = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState<any[]>([]);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
   // Delete confirm
   const [deleteTarget, setDeleteTarget] = useState<any | null>(null);
-  const [deleting, setDeleting]         = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   // User issues drawer
-  const [issueUser, setIssueUser]     = useState<any | null>(null);
-  const [userIssues, setUserIssues]   = useState<any[]>([]);
+  const [issueUser, setIssueUser] = useState<any | null>(null);
+  const [userIssues, setUserIssues] = useState<any[]>([]);
   const [issuesLoading, setIssuesLoading] = useState(false);
 
   useEffect(() => { loadData(); }, [page, search]);
@@ -133,7 +133,7 @@ export default function AdminUsersPage() {
 
   if (loading) return <LoadingPanel />;
 
-  const activeCount   = users.filter((u) => u.active !== false).length;
+  const activeCount = users.filter((u) => u.active !== false).length;
   const inactiveCount = users.filter((u) => u.active === false).length;
 
   return (
@@ -142,8 +142,8 @@ export default function AdminUsersPage() {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: "Total",    value: total,  cls: "text-slate-900" },
-            { label: "Active",   value: activeCount,   cls: "text-emerald-600" },
+            { label: "Total", value: total, cls: "text-slate-900" },
+            { label: "Active", value: activeCount, cls: "text-emerald-600" },
             { label: "Inactive", value: inactiveCount, cls: "text-slate-400" },
           ].map((s) => (
             <div key={s.label} className="rounded-xl bg-white px-4 py-3 shadow-sm ring-1 ring-slate-900/5 transition-all hover:shadow-md hover:ring-indigo-500/20">
@@ -213,11 +213,10 @@ export default function AdminUsersPage() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset ${
-                          isActive
+                        <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset ${isActive
                             ? "bg-emerald-50 text-emerald-700 ring-emerald-200/80"
                             : "bg-slate-100 text-slate-500 ring-slate-200"
-                        }`}>
+                          }`}>
                           <span className={`size-1.5 rounded-full ${isActive ? "bg-emerald-500" : "bg-slate-400"}`} />
                           {isActive ? "Active" : "Inactive"}
                         </span>
