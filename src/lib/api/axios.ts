@@ -13,12 +13,6 @@ api.interceptors.request.use((config) => {
   config.headers.Pragma = "no-cache";
   config.headers.Expires = "0";
 
-  if (config.method?.toLowerCase() === "get") {
-    config.params = {
-      ...(config.params || {}),
-      _t: Date.now(),
-    };
-  }
 
   if (typeof window !== "undefined") {
     const token = localStorage.getItem("library_access_token");

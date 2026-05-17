@@ -6,8 +6,8 @@ export const userService = {
     return data;
   },
 
-  async getBooks() {
-    const { data } = await api.get("/books/");
+  async getBooks(params = {}) {
+    const { data } = await api.get("/books/", { params });
     return data;
   },
 

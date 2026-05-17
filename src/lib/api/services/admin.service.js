@@ -6,8 +6,8 @@ export const adminService = {
     return data;
   },
 
-  async getUsers() {
-    const { data } = await api.get("/users/");
+  async getUsers(params = {}) {
+    const { data } = await api.get("/users/", { params });
     return data;
   },
 
@@ -21,8 +21,8 @@ export const adminService = {
     return data;
   },
 
-  async getBooks() {
-    const { data } = await api.get("/books/");
+  async getBooks(params = {}) {
+    const { data } = await api.get("/books/", { params });
     return data;
   },
 

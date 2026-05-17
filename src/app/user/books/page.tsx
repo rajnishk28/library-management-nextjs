@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Search, BookOpen, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { userService } from "@/lib/api/services/user.service";
 import { getSession } from "@/lib/auth";
 import { LoadingPanel } from "@/components/loading-panel";
+import { CustomPagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -15,14 +16,23 @@ import {
 } from "@/components/ui/table";
 
 export default function UserBooksPage() {
-  const [loading, setLoading]     = useState(true);
-  const [books, setBooks]         = useState<any[]>([]);
-  const [search, setSearch]       = useState("");
+  const [loading, setLoading] = useState(true);
+  const [books, setBooks] = useState<any[]>([]);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [requesting, setRequesting] = useState<string | null>(null);
+
+  useEffect(() => { void loadData(); }, [page, search]);
 
   async function loadData() {
     try {
-      setBooks(await userService.getBooks());
+      const response = await userService.getBooks({ page, limit, search });
+      setBooks(response.items || []);
+      setTotal(response.total || 0);
+      setTotalPages(response.total_pages || 1);
     } catch (error: any) {
       toast.error(error?.response?.data?.detail || "Unable to load books");
     } finally {
@@ -30,18 +40,14 @@ export default function UserBooksPage() {
     }
   }
 
-  useEffect(() => { void Promise.resolve().then(loadData); }, []);
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
 
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return books;
-    return books.filter(
-      (b) =>
-        b.title?.toLowerCase().includes(q) ||
-        b.author?.toLowerCase().includes(q) ||
-        b.category?.toLowerCase().includes(q)
-    );
-  }, [books, search]);
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   async function requestBook(bookId: string) {
     const session = getSession();
@@ -78,9 +84,9 @@ export default function UserBooksPage() {
 
       {/* Summary strip */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <SummaryCard label="Total titles"  value={books.length} />
+        <SummaryCard label="Total titles" value={total} />
         <SummaryCard label="Available now" value={availableCount} color="emerald" />
-        <SummaryCard label="Unavailable"   value={books.length - availableCount} color="slate" className="hidden sm:block" />
+        <SummaryCard label="Unavailable" value={books.length - availableCount} color="slate" className="hidden sm:block" />
       </div>
 
       {/* Table card */}
@@ -91,14 +97,14 @@ export default function UserBooksPage() {
           <div className="flex items-center gap-2">
             <BookOpen className="size-4 text-slate-400" />
             <span className="text-sm font-semibold text-slate-800">Browse books</span>
-            <span className="rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-semibold text-indigo-600 ring-1 ring-indigo-100">{filtered.length}</span>
+            <span className="rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-semibold text-indigo-600 ring-1 ring-indigo-100">{total}</span>
           </div>
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-slate-400" />
             <Input
               placeholder="Search title, author, category…"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => handleSearch(e.target.value)}
               className="h-8 w-full pl-8 text-xs"
             />
           </div>
@@ -116,18 +122,18 @@ export default function UserBooksPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.length === 0 ? (
+            {books.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="py-14 text-center text-sm text-slate-400">
                   {search ? `No books match "${search}"` : "No books available"}
                 </TableCell>
               </TableRow>
             ) : (
-              filtered.map((book) => {
-                const avail  = Number(book.available);
-                const total  = Number(book.quantity);
-                const pct    = total > 0 ? Math.round((avail / total) * 100) : 0;
-                const isOut  = avail <= 0;
+              books.map((book) => {
+                const avail = Number(book.available);
+                const copies = Number(book.quantity);
+                const pct = copies > 0 ? Math.round((avail / copies) * 100) : 0;
+                const isOut = avail <= 0;
                 const isBusy = requesting === book._id;
 
                 return (
@@ -139,7 +145,7 @@ export default function UserBooksPage() {
                     <TableCell>
                       <Badge variant="outline" className="rounded-full text-xs font-medium">{book.category}</Badge>
                     </TableCell>
-                    <TableCell className="text-sm text-slate-600">{total}</TableCell>
+                    <TableCell className="text-sm text-slate-600">{copies}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2.5">
                         <span className={`min-w-[1.5rem] text-sm font-semibold ${isOut ? "text-red-500" : "text-emerald-600"}`}>
@@ -159,7 +165,7 @@ export default function UserBooksPage() {
                         className={`h-8 rounded-lg px-3 text-xs font-semibold transition-all ${isOut
                           ? "cursor-not-allowed bg-slate-100 text-slate-400 shadow-none"
                           : "bg-indigo-600 text-white shadow-sm shadow-indigo-500/20 hover:bg-indigo-700 hover:shadow-md"
-                        }`}
+                          }`}
                         disabled={isOut || isBusy}
                         onClick={() => requestBook(book._id)}
                       >
@@ -172,6 +178,14 @@ export default function UserBooksPage() {
             )}
           </TableBody>
         </Table>
+
+        <div className="border-t border-slate-100 px-5 py-4">
+          <CustomPagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import {
 import { toast } from "sonner";
 import { adminService } from "@/lib/api/services/admin.service";
 import { LoadingPanel } from "@/components/loading-panel";
+import { CustomPagination } from "@/components/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,6 +54,10 @@ export default function AdminUsersPage() {
   const [loading, setLoading]   = useState(true);
   const [users, setUsers]       = useState<any[]>([]);
   const [search, setSearch]     = useState("");
+  const [page, setPage]         = useState(1);
+  const [limit]                 = useState(10);
+  const [total, setTotal]       = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   // Delete confirm
   const [deleteTarget, setDeleteTarget] = useState<any | null>(null);
@@ -63,11 +68,14 @@ export default function AdminUsersPage() {
   const [userIssues, setUserIssues]   = useState<any[]>([]);
   const [issuesLoading, setIssuesLoading] = useState(false);
 
-  useEffect(() => { loadData(); }, []);
+  useEffect(() => { loadData(); }, [page, search]);
 
   async function loadData() {
     try {
-      setUsers(await adminService.getUsers());
+      const response = await adminService.getUsers({ page, limit, search });
+      setUsers(response.items || []);
+      setTotal(response.total || 0);
+      setTotalPages(response.total_pages || 1);
     } catch (error: any) {
       toast.error(error?.response?.data?.detail || "Unable to load users");
     } finally {
@@ -100,6 +108,15 @@ export default function AdminUsersPage() {
     }
   }
 
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
   async function openUserIssues(user: any) {
     setIssueUser(user);
     setUserIssues([]);
@@ -119,19 +136,13 @@ export default function AdminUsersPage() {
   const activeCount   = users.filter((u) => u.active !== false).length;
   const inactiveCount = users.filter((u) => u.active === false).length;
 
-  const filtered = users.filter((u) => {
-    const q = search.trim().toLowerCase();
-    if (!q) return true;
-    return (u.name?.toLowerCase().includes(q) || u.email?.toLowerCase().includes(q));
-  });
-
   return (
     <>
       <div className="space-y-5">
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: "Total",    value: users.length,  cls: "text-slate-900" },
+            { label: "Total",    value: total,  cls: "text-slate-900" },
             { label: "Active",   value: activeCount,   cls: "text-emerald-600" },
             { label: "Inactive", value: inactiveCount, cls: "text-slate-400" },
           ].map((s) => (
@@ -149,14 +160,14 @@ export default function AdminUsersPage() {
             <div className="flex items-center gap-2">
               <Users className="size-4 text-slate-400" />
               <span className="text-sm font-semibold text-slate-800">All members</span>
-              <span className="rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-semibold text-indigo-600 ring-1 ring-indigo-100">{users.length}</span>
+              <span className="rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-semibold text-indigo-600 ring-1 ring-indigo-100">{total}</span>
             </div>
             <div className="relative">
               <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-slate-400" />
               <Input
                 placeholder="Search name or email…"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
                 className="h-8 w-full pl-8 text-xs sm:w-56"
               />
             </div>
@@ -173,14 +184,14 @@ export default function AdminUsersPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.length === 0 ? (
+              {users.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="py-14 text-center text-sm text-slate-400">
                     {search ? `No users match "${search}"` : "No users found"}
                   </TableCell>
                 </TableRow>
               ) : (
-                filtered.map((user) => {
+                users.map((user) => {
                   const isActive = user.active !== false;
                   return (
                     <TableRow key={user._id} className="transition-colors hover:bg-slate-50/60">
@@ -261,6 +272,13 @@ export default function AdminUsersPage() {
               )}
             </TableBody>
           </Table>
+
+          {/* Pagination */}
+          <CustomPagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
 

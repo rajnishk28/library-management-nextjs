@@ -6,6 +6,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { adminService } from "@/lib/api/services/admin.service";
 import { LoadingPanel } from "@/components/loading-panel";
+import { CustomPagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,17 +34,24 @@ export default function AdminBooksPage() {
   const [loading, setLoading]   = useState(true);
   const [books, setBooks]       = useState<any[]>([]);
   const [search, setSearch]     = useState("");
+  const [page, setPage]         = useState(1);
+  const [limit]                 = useState(10);
+  const [total, setTotal]       = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [editBook, setEditBook] = useState<any | null>(null);
   const [editForm, setEditForm] = useState(emptyEdit);
   const [saving, setSaving]     = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<any | null>(null);
   const [deleting, setDeleting]         = useState(false);
 
-  useEffect(() => { loadData(); }, []);
+  useEffect(() => { loadData(); }, [page, search]);
 
   async function loadData() {
     try {
-      setBooks(await adminService.getBooks());
+      const response = await adminService.getBooks({ page, limit, search });
+      setBooks(response.items || []);
+      setTotal(response.total || 0);
+      setTotalPages(response.total_pages || 1);
     } catch (error: any) {
       toast.error(error?.response?.data?.detail || "Unable to load books");
     } finally {
@@ -81,6 +89,15 @@ export default function AdminBooksPage() {
     }
   }
 
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
   async function deleteBook(bookId: string) {
     setDeleting(true);
     try {
@@ -95,15 +112,6 @@ export default function AdminBooksPage() {
     }
   }
 
-  const filtered = books.filter((b) => {
-    const q = search.trim().toLowerCase();
-    if (!q) return true;
-    return (
-      b.title?.toLowerCase().includes(q) ||
-      b.author?.toLowerCase().includes(q) ||
-      b.category?.toLowerCase().includes(q)
-    );
-  });
 
   if (loading) return <LoadingPanel />;
 
@@ -111,7 +119,7 @@ export default function AdminBooksPage() {
     <>
       {/* Stats row */}
       <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatCard label="Total titles"  value={books.length} />
+        <StatCard label="Total titles"  value={total} />
         <StatCard label="Total copies"  value={books.reduce((s, b) => s + (b.quantity  || 0), 0)} />
         <StatCard label="Available"     value={books.reduce((s, b) => s + (b.available || 0), 0)} color="green" />
         <StatCard label="Issued"        value={books.reduce((s, b) => s + ((b.quantity || 0) - (b.available || 0)), 0)} color="amber" />
@@ -125,7 +133,7 @@ export default function AdminBooksPage() {
           <div className="flex items-center gap-2">
             <BookOpen className="size-4 text-slate-400" />
             <span className="text-sm font-semibold text-slate-800">All books</span>
-            <span className="rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-semibold text-indigo-600 ring-1 ring-indigo-100">{books.length}</span>
+            <span className="rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-semibold text-indigo-600 ring-1 ring-indigo-100">{total}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -134,7 +142,7 @@ export default function AdminBooksPage() {
               <Input
                 placeholder="Search books…"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
                 className="h-8 w-48 pl-8 text-xs sm:w-56"
               />
             </div>
@@ -163,7 +171,7 @@ export default function AdminBooksPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.length === 0 ? (
+            {books.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="py-14 text-center text-sm text-slate-400">
                   {search
@@ -172,7 +180,7 @@ export default function AdminBooksPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              filtered.map((book) => {
+              books.map((book) => {
                 const pct = book.quantity > 0
                   ? Math.round((book.available / book.quantity) * 100)
                   : 0;
@@ -227,6 +235,13 @@ export default function AdminBooksPage() {
             )}
           </TableBody>
         </Table>
+
+        {/* Pagination */}
+        <CustomPagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
 
       {/* Edit Dialog */}
